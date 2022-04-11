@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "431097164220",
+    "project_id": "photoapp-f1adc",
+    "storage_bucket": "photoapp-f1adc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431097164220:android:6113062d68677955c3bbb9",
+        "android_client_info": {
+          "package_name": "com.example.photoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431097164220-ghge1s5vmabg9jr6fdjucgsn6ata89bl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBJ1Ib1e80ws0nNBuwsDJfzFYq7ilvmc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431097164220-ghge1s5vmabg9jr6fdjucgsn6ata89bl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
