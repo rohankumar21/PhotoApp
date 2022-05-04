@@ -64,7 +64,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 case R.id.nav_users:
                     actionBar.setTitle("Map");
-                    MapFragment fragment2 = new MapFragment();
+                    MapsFragment fragment2 = new MapsFragment();
                     FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction2.replace(R.id.content, fragment2, "");
                     fragmentTransaction2.commit();
