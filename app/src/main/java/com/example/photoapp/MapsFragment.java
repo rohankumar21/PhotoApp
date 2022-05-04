@@ -3,13 +3,22 @@ package com.example.photoapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -17,10 +26,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MapsFragment extends Fragment {
     private static final int LOCATION_REQUEST_CODE = 101;
     private GoogleMap mMap;
+    FloatingActionButton addMap;
+    private Location currentLocation;
+    FusedLocationProviderClient client;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -45,6 +58,8 @@ public class MapsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Initialize view
         View view=inflater.inflate(R.layout.fragment_maps, container, false);
+        addMap = view.findViewById(R.id.addMap);
+        client = LocationServices.getFusedLocationProviderClient(getActivity());
 
         // Initialize map fragment
         SupportMapFragment supportMapFragment=(SupportMapFragment)
@@ -76,14 +91,17 @@ public class MapsFragment extends Fragment {
                 });
             }
         });
+        addMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AddMapMarker.class));
+            }
+        });
         // Return view
         return view;
     }
 
-    protected void requestPermission(String permissionType,
-                                      int requestCode) {
-        requestPermissions(new String[]{permissionType}, requestCode);
-    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
