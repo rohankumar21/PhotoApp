@@ -1,9 +1,6 @@
 package com.example.photoapp;
 
-<<<<<<< HEAD
 import android.annotation.SuppressLint;
-=======
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,10 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-<<<<<<< HEAD
 import android.app.Activity;
-=======
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,11 +47,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
     private DatabaseReference liekeref, postref;
     boolean mprocesslike = false;
 
-<<<<<<< HEAD
     public AdapterPosts(Context context, List<ModelPosts> modelPosts) {
-=======
-    public AdapterPosts(Context context, List<ModelPost> modelPosts) {
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
         this.context = context;
         this.modelPosts = modelPosts;
         myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -65,11 +55,8 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         postref = FirebaseDatabase.getInstance().getReference().child("Posts");
     }
 
-<<<<<<< HEAD
+
     List<ModelPosts> modelPosts;
-=======
-    List<ModelPost> modelPosts;
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
 
     @NonNull
     @Override
@@ -78,12 +65,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         return new MyHolder(view);
     }
 
-    @Override
-<<<<<<< HEAD
     public void onBindViewHolder(@NonNull final MyHolder holder, @SuppressLint("RecyclerView") final int position) {
-=======
-    public void onBindViewHolder(@NonNull final MyHolder holder, final int position) {
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
         final String uid = modelPosts.get(position).getUid();
         String nameh = modelPosts.get(position).getUname();
         final String titlee = modelPosts.get(position).getTitle();
@@ -230,10 +212,6 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                     holder.likebtn.setText("Like");
                 }
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

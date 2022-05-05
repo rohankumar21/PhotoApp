@@ -1,10 +1,5 @@
 package com.example.photoapp;
 
-<<<<<<< HEAD
-public class AdaptUsers {
-
-}
-=======
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,4 +71,3 @@ public class AdaptUsers extends RecyclerView.Adapter<AdaptUsers.MyHolder> {
         }
     }
 }
->>>>>>> cd4c86e7730c5dd37e4c9c85563ab178cfc837a0

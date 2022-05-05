@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_home"
         android:title="Home" />
     <item
-        android:id="@+id/nav_users"
+        android:id="@+id/nav_map"
         android:icon="@drawable/map"
         android:title="Map" />
     <item
@@ -14,17 +14,12 @@
         android:title="Add Post" />
 
     <item
-        android:id="@+id/nav_chat"
+        android:id="@+id/nav_users"
         android:icon="@drawable/network"
         android:title="Network" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_account"
         android:title="Profile" />
-
-    <item
-        android:id="@+id/logout"
-        android:title="Logout">
-    </item>
 
 </menu>

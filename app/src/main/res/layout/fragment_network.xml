@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".NetworkFragment">
 
-<<<<<<< HEAD
-    <!-- TODO: Update blank fragment layout -->
-=======
-
->>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclep"
         android:layout_width="match_parent"

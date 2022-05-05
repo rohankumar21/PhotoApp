@@ -54,6 +54,14 @@ public class DashboardActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     return true;
 
+                case R.id.nav_map:
+                    actionBar.setTitle("Maps");
+                    MapsFragment listFragment = new MapsFragment();
+                    FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction3.replace(R.id.content, listFragment, "");
+                    fragmentTransaction3.commit();
+                    return true;
+
                 case R.id.nav_profile:
                     actionBar.setTitle("Profile");
                     ProfileFragment fragment1 = new ProfileFragment();
@@ -63,27 +71,20 @@ public class DashboardActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.nav_users:
-                    actionBar.setTitle("Map");
-                    MapsFragment fragment2 = new MapsFragment();
+                    actionBar.setTitle("Users");
+                    NetworkFragment fragment2 = new NetworkFragment();
                     FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction2.replace(R.id.content, fragment2, "");
                     fragmentTransaction2.commit();
                     return true;
 
-                case R.id.nav_chat:
-                    actionBar.setTitle("Network");
-                    NetworkFragment fragment4 = new NetworkFragment();
+
+                case R.id.nav_addblogs:
+                    actionBar.setTitle("Add Blogs");
+                    AddPostFragment fragment4 = new AddPostFragment();
                     FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction4.replace(R.id.content, fragment4, "");
                     fragmentTransaction4.commit();
-                    return true;
-
-                case R.id.nav_addblogs:
-                    actionBar.setTitle("Add Post");
-                    AddPostFragment listFragment = new AddPostFragment();
-                    FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction3.replace(R.id.content, listFragment, "");
-                    fragmentTransaction3.commit();
                     return true;
             }
             return false;
