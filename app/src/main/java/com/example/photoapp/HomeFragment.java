@@ -1,11 +1,15 @@
 package com.example.photoapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import com.google.firebase.auth.FirebaseAuth;
 import android.view.View;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 /**
@@ -23,6 +27,7 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    FirebaseAuth firebaseAuth;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,7 +63,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        firebaseAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+    // Logout Functionality
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
+            firebaseAuth.signOut();
+            startActivity(new Intent(getContext(), SplashScreen.class));
+            getActivity().finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

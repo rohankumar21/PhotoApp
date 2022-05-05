@@ -1,2 +1,5 @@
-package com.example.photoapp;public class PostLikedByActivity {
+package com.example.photoapp;
+
+public class PostLikedByActivity {
+
 }
