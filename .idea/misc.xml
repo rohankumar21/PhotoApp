@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/adria/CMSC436 - Final Project/PhotoApp/app/src/main/res/layout/activity_login.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/adria/CMSC436 - Final Project/PhotoApp/app/src/main/res/layout/fragment_profile.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/adria/CMSC436 - Final Project/PhotoApp/app/src/main/res/layout/row_posts.xml" value="0.1" />
+        <entry key="..\:/Users/adria/CMSC436 - Final Project/PhotoApp/app/src/main/res/menu/main_menu.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/adria/CMSC436 - Final Project/PhotoApp/app/src/main/res/menu/menus_nav.xml" value="0.14166666666666666" />
         <entry key="app/src/main/res/drawable-v24/buttonss.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable-v24/edit.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable-v24/ic_account.xml" value="0.1985" />
@@ -30,8 +35,12 @@
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_network.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+<<<<<<< HEAD
         <entry key="app/src/main/res/layout/row_posts.xml" value="0.2625" />
         <entry key="app/src/main/res/layout/row_users.xml" value="0.11979166666666667" />
+=======
+        <entry key="app/src/main/res/layout/row_users.xml" value="0.1" />
+>>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
         <entry key="app/src/main/res/menu/menus_nav.xml" value="0.36822916666666666" />
       </map>
     </option>

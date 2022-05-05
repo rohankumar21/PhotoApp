@@ -148,7 +148,6 @@ public class EditProfilePage extends AppCompatActivity {
                         Glide.with(EditProfilePage.this).load(image).into(set);
                     } catch (Exception e) {
                     }
-
                 }
             }
 

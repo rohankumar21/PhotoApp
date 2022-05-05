@@ -2,9 +2,19 @@ package com.example.photoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+=======
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import com.google.firebase.auth.FirebaseAuth;
+>>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
 import android.view.View;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -29,11 +39,23 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
 
+<<<<<<< HEAD
     FirebaseAuth firebaseAuth;
     String myuid;
     RecyclerView recyclerView;
     List<ModelPosts> posts;
     AdapterPosts adapterPosts;
+=======
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    FirebaseAuth firebaseAuth;
+>>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
 
     public HomeFragment() {
         // Required empty public constructor
@@ -78,9 +100,27 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+<<<<<<< HEAD
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
+=======
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+    // Logout Functionality
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
+            firebaseAuth.signOut();
+            startActivity(new Intent(getContext(), SplashScreen.class));
+            getActivity().finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+>>>>>>> 6636f98e9111eddb6bcc1093fa4454b8295ead84
 }
