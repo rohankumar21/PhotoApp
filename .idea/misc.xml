@@ -26,6 +26,7 @@
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_network.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/row_users.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menus_nav.xml" value="0.36822916666666666" />
       </map>
     </option>
