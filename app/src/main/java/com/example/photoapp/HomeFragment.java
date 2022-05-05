@@ -2,10 +2,14 @@ package com.example.photoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import android.view.View;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -95,19 +100,27 @@ public class HomeFragment extends Fragment {
         });
     }
 
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     // Logout Functionality
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //if (item.getItemId() == R.id.logout) {
-            //firebaseAuth.signOut();
-            //startActivity(new Intent(getContext(), SplashScreen.class));
-            //getActivity().finish();
-        //}
+        if (item.getItemId() == R.id.logout) {
+            firebaseAuth.signOut();
+            startActivity(new Intent(getContext(), SplashScreen.class));
+            getActivity().finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 }
