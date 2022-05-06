@@ -77,9 +77,6 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         String comm = modelPosts.get(position).getPcomments();
         final String pid = modelPosts.get(position).getPtime();
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-        System.out.println(ptime);
-        System.out.println(titlee);
-        System.out.println(descri);
         calendar.setTimeInMillis(Long.parseLong(ptime));
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
         holder.name.setText(nameh);
