@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -251,7 +253,7 @@ public class AddPostFragment extends Fragment {
 
     // if access is given then pick image from gallery
     private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, IMAGEPICK_GALLERY_REQUEST);
     }
@@ -261,25 +263,27 @@ public class AddPostFragment extends Fragment {
         // show the progress dialog box
         pd.setMessage("Publishing Post");
         pd.show();
+
         final String timestamp = String.valueOf(System.currentTimeMillis());
         String filepathname = "Posts/" + "post" + timestamp;
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
         byte[] data = byteArrayOutputStream.toByteArray();
+        HashMap<Object, String> hashMap = new HashMap<>();
 
         // initialising the storage reference for updating the data
         StorageReference storageReference1 = FirebaseStorage.getInstance().getReference().child(filepathname);
-        storageReference1.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        storageReference1.putFile(imageuri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // getting the url of image uploaded
                 Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                 while (!uriTask.isSuccessful()) ;
                 String downloadUri = uriTask.getResult().toString();
+                System.out.println(downloadUri);
                 if (uriTask.isSuccessful()) {
                     // if task is successful the update the data into firebase
-                    HashMap<Object, String> hashMap = new HashMap<>();
                     hashMap.put("uid", uid);
                     hashMap.put("uname", name);
                     hashMap.put("uemail", email);
@@ -292,7 +296,7 @@ public class AddPostFragment extends Fragment {
                     hashMap.put("pcomments", "0");
 
                     // set the data into firebase and then empty the title ,description and image data
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(filepathname);
                     databaseReference.child(timestamp).setValue(hashMap)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -321,6 +325,12 @@ public class AddPostFragment extends Fragment {
                 pd.dismiss();
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                Log.d("test", "uploadDataInMemory progress : " + progress);
+            }
         });
     }
 
@@ -329,8 +339,12 @@ public class AddPostFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == getActivity().RESULT_OK) {
             if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
-                imageuri = data.getData();
-                image.setImageURI(imageuri);
+                if(data != null) {
+                    imageuri = data.getData();
+                    image.setImageURI(imageuri);
+                } else {
+                    return;
+                }
             }
             if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
                 image.setImageURI(imageuri);

@@ -83,13 +83,13 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 posts.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    ModelPosts modelPost = dataSnapshot1.getValue(ModelPosts.class);
-                    posts.add(modelPost);
-
-
-                    adapterPosts = new AdapterPosts(getActivity(), posts);
-                    recyclerView.setAdapter(adapterPosts);
+                    for (DataSnapshot childsnapshot: dataSnapshot1.getChildren()) {
+                        ModelPosts modelPost = childsnapshot.getValue(ModelPosts.class);
+                        posts.add(modelPost);
+                    }
                 }
+                adapterPosts = new AdapterPosts(getActivity(), posts);
+                recyclerView.setAdapter(adapterPosts);
             }
 
             @Override

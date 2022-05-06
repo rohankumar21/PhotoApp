@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,7 +54,6 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         postref = FirebaseDatabase.getInstance().getReference().child("Posts");
     }
 
-
     List<ModelPosts> modelPosts;
 
     @NonNull
@@ -65,6 +63,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         return new MyHolder(view);
     }
 
+    @Override
     public void onBindViewHolder(@NonNull final MyHolder holder, @SuppressLint("RecyclerView") final int position) {
         final String uid = modelPosts.get(position).getUid();
         String nameh = modelPosts.get(position).getUname();
@@ -78,6 +77,9 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         String comm = modelPosts.get(position).getPcomments();
         final String pid = modelPosts.get(position).getPtime();
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
+        System.out.println(ptime);
+        System.out.println(titlee);
+        System.out.println(descri);
         calendar.setTimeInMillis(Long.parseLong(ptime));
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
         holder.name.setText(nameh);
@@ -98,6 +100,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         } catch (Exception e) {
 
         }
+
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +109,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                 holder.itemView.getContext().startActivity(intent);
             }
         });
+
         holder.likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,12 +139,15 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                 });
             }
         });
+
         holder.more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showMoreOptions(holder.more, uid, myuid, ptime, image);
             }
         });
+
+
         holder.comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +193,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                         pd.dismiss();
                         Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_LONG).show();
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -212,6 +220,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                     holder.likebtn.setText("Like");
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

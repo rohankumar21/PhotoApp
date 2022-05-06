@@ -1,8 +1,23 @@
 package com.example.photoapp;
 
 public class ModelPosts {
-    public ModelPosts() {
-    }
+    //public ModelPosts() {
+    //}
+
+    //public ModelPosts(String description, String pid, String ptime, String pcomments, String title, String udp, String uemail, String uid, String uimage, String uname, String plike) {
+        //this.description = description;
+        //this.pid = pid;
+        //this.ptime = ptime;
+        //this.pcomments = pcomments;
+        //this.title = title;
+        //this.udp = udp;
+        //this.uemail = uemail;
+        //this.uid = uid;
+        //this.uimage = uimage;
+        //this.uname = uname;
+        //this.plike = plike;
+        //System.out.println("Description:" + this.description);
+    //}
 
     String description;
 
@@ -96,19 +111,6 @@ public class ModelPosts {
         this.pcomments = pcomments;
     }
 
-    public ModelPosts(String description, String pid, String ptime, String pcomments, String title, String udp, String uemail, String uid, String uimage, String uname, String plike) {
-        this.description = description;
-        this.pid = pid;
-        this.ptime = ptime;
-        this.pcomments = pcomments;
-        this.title = title;
-        this.udp = udp;
-        this.uemail = uemail;
-        this.uid = uid;
-        this.uimage = uimage;
-        this.uname = uname;
-        this.plike = plike;
-    }
 
     String ptime, pcomments;
 
