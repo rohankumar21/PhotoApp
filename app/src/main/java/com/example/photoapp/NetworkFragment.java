@@ -1,3 +1,4 @@
+
 package com.example.photoapp;
 
 import android.os.Bundle;
@@ -105,8 +106,41 @@ public class NetworkFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                return;
             }
         });
     }
+
+
+    // Search Users function
+    private void searchusers(final String s) {
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersList.clear();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    ModUsers modelUsers = dataSnapshot1.getValue(ModUsers.class);
+                    if (!modelUsers.getUid().equals(firebaseUser.getUid())) {
+                        if (modelUsers.getName().toLowerCase().contains(s.toLowerCase()) ||
+                                modelUsers.getEmail().toLowerCase().contains(s.toLowerCase())) {
+                            usersList.add(modelUsers);
+                        }
+                    }
+                    adapterUsers = new AdaptUsers(getActivity(), usersList);
+                    adapterUsers.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterUsers);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                return;
+            }
+        });
+    }
+
+
 }
