@@ -121,10 +121,13 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                                 postref.child("post" + postid).child(postid).child("plike").setValue("" + (plike - 1));
                                 liekeref.child(postid).child(myuid).removeValue();
                                 mprocesslike = false;
+
+
                             } else {
                                 postref.child("post" + postid).child(postid).child("plike").setValue("" + (plike + 1));
                                 liekeref.child(postid).child(myuid).setValue("Liked");
                                 mprocesslike = false;
+
                             }
                         }
                     }
@@ -134,6 +137,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
 
                     }
                 });
+
             }
         });
 
@@ -180,15 +184,20 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
         picref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Query query = FirebaseDatabase.getInstance().getReference("Posts").orderByChild("ptime").equalTo(pid);
-                query.addValueEventListener(new ValueEventListener() {
+                DatabaseReference q = FirebaseDatabase.getInstance().getReference("Posts");
+                q.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                            dataSnapshot1.getRef().removeValue();
+                            for (DataSnapshot ds : dataSnapshot1.getChildren())
+                                if (ds.getKey().equals(pid)){
+                                dataSnapshot1.getRef().removeValue();
+                                pd.dismiss();
+                                Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_LONG).show();
+                            }
+
                         }
-                        pd.dismiss();
-                        Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override
@@ -196,6 +205,26 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
 
                     }
                 });
+                DatabaseReference q_two = FirebaseDatabase.getInstance().getReference("Likes");
+                q_two.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
+                            if (dataSnapshot1.getKey().equals(pid)){
+                                dataSnapshot1.getRef().removeValue();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

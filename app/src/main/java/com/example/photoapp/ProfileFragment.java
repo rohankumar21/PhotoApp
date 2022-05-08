@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,10 +40,13 @@ public class ProfileFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ImageView avatartv;
-    TextView nam, email;
+    TextView nam, email, number_of_likes, number_of_blogs;
     RecyclerView postrecycle;
     FloatingActionButton fab;
     ProgressDialog pd;
+    ArrayList<ModelPosts> posts;
+    AdapterPosts adapterPosts;
+    String uid;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,8 +68,12 @@ public class ProfileFragment extends Fragment {
         avatartv = view.findViewById(R.id.avatartv);
         nam = view.findViewById(R.id.nametv);
         email = view.findViewById(R.id.emailtv);
+        uid = FirebaseAuth.getInstance().getUid();
         fab = view.findViewById(R.id.fab);
+        postrecycle = view.findViewById(R.id.recyclerposts);
+        posts = new ArrayList<>();
         pd = new ProgressDialog(getActivity());
+        loadMyPosts();
         pd.setCanceledOnTouchOutside(false);
         Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
 
@@ -91,6 +102,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
+
+
         // On click we will open EditProfileActiity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +113,38 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void loadMyPosts() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        postrecycle.setLayoutManager(layoutManager);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                posts.clear();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    for (DataSnapshot childsnapshot: dataSnapshot1.getChildren()) {
+                        if (childsnapshot.child("uid").getValue().equals(uid)) {
+                            ModelPosts modelPost = childsnapshot.getValue(ModelPosts.class);
+                            posts.add(modelPost);
+                        }
+
+                    }
+                }
+                adapterPosts = new AdapterPosts(getActivity(), posts);
+                postrecycle.setAdapter(adapterPosts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
