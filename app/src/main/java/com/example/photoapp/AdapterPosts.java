@@ -118,11 +118,11 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.photoapp.Adap
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (mprocesslike) {
                             if (dataSnapshot.child(postid).hasChild(myuid)) {
-                                postref.child(postid).child("plike").setValue("" + (plike - 1));
+                                postref.child("post" + postid).child(postid).child("plike").setValue("" + (plike - 1));
                                 liekeref.child(postid).child(myuid).removeValue();
                                 mprocesslike = false;
                             } else {
-                                postref.child(postid).child("plike").setValue("" + (plike + 1));
+                                postref.child("post" + postid).child(postid).child("plike").setValue("" + (plike + 1));
                                 liekeref.child(postid).child(myuid).setValue("Liked");
                                 mprocesslike = false;
                             }

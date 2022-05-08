@@ -88,9 +88,10 @@ public class AddPostFragment extends Fragment {
         Intent intent = getActivity().getIntent();
 
         // Retrieving the user data like name ,email and profile pic using query
+        String user_ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        Query query = databaseReference.orderByChild("email").equalTo(email);
-        query.addValueEventListener(new ValueEventListener() {
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
@@ -282,6 +283,21 @@ public class AddPostFragment extends Fragment {
                 while (!uriTask.isSuccessful()) ;
                 String downloadUri = uriTask.getResult().toString();
                 System.out.println(downloadUri);
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users/"+uid);
+                db.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        name = "" + snapshot.child("name").getValue();
+                        email = "" + snapshot.child("email").getValue();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        return;
+                    }
+                });
                 if (uriTask.isSuccessful()) {
                     // if task is successful the update the data into firebase
                     hashMap.put("uid", uid);
