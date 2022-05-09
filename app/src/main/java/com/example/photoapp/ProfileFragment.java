@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ImageView avatartv;
-    TextView nam, email, number_of_likes, number_of_blogs;
+    TextView nam, email;
     RecyclerView postrecycle;
     FloatingActionButton fab;
     ProgressDialog pd;

@@ -33,8 +33,8 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterChat extends RecyclerView.Adapter<com.example.photoapp.AdapterChat.Myholder> {
-    private static final int MSG_TYPE_LEFT = 0;
-    private static final int MSG_TYPR_RIGHT = 1;
+    private static int MSG_TYPE_LEFT = 0;
+    private static  int MSG_TYPR_RIGHT = 1;
     Context context;
     List<Modchat> list;
     String imageurl;
@@ -49,7 +49,7 @@ public class AdapterChat extends RecyclerView.Adapter<com.example.photoapp.Adapt
     @NonNull
     @Override
     public Myholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == MSG_TYPE_LEFT) {
+        if (MSG_TYPE_LEFT == 1) {
             View view = LayoutInflater.from(context).inflate(R.layout.row_left, parent, false);
             return new Myholder(view);
         } else {
@@ -61,6 +61,7 @@ public class AdapterChat extends RecyclerView.Adapter<com.example.photoapp.Adapt
     @Override
     public void onBindViewHolder(@NonNull Myholder holder, @SuppressLint("RecyclerView") final int position) {
         String message = list.get(position).getMessage();
+
         String timeStamp = list.get(position).getTimestamp();
         String type = list.get(position).getType();
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
@@ -68,6 +69,7 @@ public class AdapterChat extends RecyclerView.Adapter<com.example.photoapp.Adapt
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
         holder.message.setText(message);
         holder.time.setText(timedate);
+
         try {
             Glide.with(context).load(imageurl).into(holder.image);
         } catch (Exception e) {
@@ -145,8 +147,12 @@ public class AdapterChat extends RecyclerView.Adapter<com.example.photoapp.Adapt
     public int getItemViewType(int position) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (list.get(position).getSender().equals(firebaseUser.getUid())) {
+            AdapterChat.MSG_TYPR_RIGHT = 1;
+            AdapterChat.MSG_TYPE_LEFT = 0;
             return MSG_TYPR_RIGHT;
         } else {
+            AdapterChat.MSG_TYPR_RIGHT = 0;
+            AdapterChat.MSG_TYPE_LEFT = 1;
             return MSG_TYPE_LEFT;
         }
     }
@@ -155,17 +161,18 @@ public class AdapterChat extends RecyclerView.Adapter<com.example.photoapp.Adapt
 
         CircleImageView image;
         ImageView mimage;
-        TextView message, time, isSee;
+        TextView message, time, isSee, name;
         LinearLayout msglayput;
 
         public Myholder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.profilec);
+            image = itemView.findViewById(R.id.profileimage);
             message = itemView.findViewById(R.id.msgc);
             time = itemView.findViewById(R.id.timetv);
             isSee = itemView.findViewById(R.id.isSeen);
             msglayput = itemView.findViewById(R.id.msglayout);
             mimage = itemView.findViewById(R.id.images);
+
         }
     }
 }

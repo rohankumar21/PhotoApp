@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/msglayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,12 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profilec"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/profile_image"
-            app:civ_border_color="@null" />
+
 
         <TextView
             android:id="@+id/msgc"
@@ -37,7 +31,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:adjustViewBounds="true"
-            android:background="@color/lightPurple"
+            android:background="@color/colorWhite"
             android:padding="15dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_images" />

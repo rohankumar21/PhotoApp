@@ -326,21 +326,27 @@ public class EditProfilePage extends AppCompatActivity {
                     });
                     if (key.equals("name")) {
                         final DatabaseReference databaser = FirebaseDatabase.getInstance().getReference("Posts");
-                        Query query = databaser.orderByChild("uid").equalTo(uid);
-                        query.addValueEventListener(new ValueEventListener() {
+                        uid = FirebaseAuth.getInstance().getUid();
+
+                        databaser.addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                    String child = databaser.getKey();
-                                    dataSnapshot1.getRef().child("uname").setValue(value);
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot i: snapshot.getChildren()){
+                                    for (DataSnapshot j: i.getChildren()){
+                                        if (j.child("uid").getValue().equals(uid)){
+                                            DatabaseReference re = j.child("uname").getRef();
+                                            re.setValue(value);
+                                        }
+                                    }
                                 }
                             }
 
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            public void onCancelled(@NonNull DatabaseError error) {
 
                             }
                         });
+
                     }
                 } else {
                     Toast.makeText(EditProfilePage.this, "Unable to update", Toast.LENGTH_LONG).show();
@@ -478,6 +484,26 @@ public class EditProfilePage extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             pd.dismiss();
                             Toast.makeText(EditProfilePage.this, "Error Updating ", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    DatabaseReference df = FirebaseDatabase.getInstance().getReference("Posts");
+                    df.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot i: snapshot.getChildren()){
+                                for (DataSnapshot j: i.getChildren()){
+                                    if (j.child("uid").getValue().equals(uid)){
+                                        DatabaseReference k = j.child("udp").getRef();
+                                        k.setValue(hashMap.get(profileOrCoverPhoto));
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
                 } else {
