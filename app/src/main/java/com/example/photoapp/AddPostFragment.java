@@ -95,8 +95,10 @@ public class AddPostFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    name = dataSnapshot1.child("name").getValue().toString();
-                    email = "" + dataSnapshot1.child("email").getValue();
+                    if (dataSnapshot1.child("uid").getValue().equals(user_ID)) {
+                        name = dataSnapshot1.child("name").getValue().toString();
+                        email = "" + dataSnapshot1.child("email").getValue();
+                    }
                     if(dataSnapshot1.child("image").getValue() != null) {
                         dp = "" + dataSnapshot1.child("image").getValue().toString();
                     }
@@ -284,20 +286,7 @@ public class AddPostFragment extends Fragment {
                 String downloadUri = uriTask.getResult().toString();
                 System.out.println(downloadUri);
                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users/"+uid);
-                db.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        name = "" + snapshot.child("name").getValue();
-                        email = "" + snapshot.child("email").getValue();
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        return;
-                    }
-                });
                 if (uriTask.isSuccessful()) {
                     // if task is successful the update the data into firebase
                     hashMap.put("uid", uid);
