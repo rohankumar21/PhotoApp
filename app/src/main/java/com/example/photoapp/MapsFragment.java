@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -26,14 +27,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MapsFragment extends Fragment {
     private static final int LOCATION_REQUEST_CODE = 101;
     private GoogleMap mMap;
+    private double lat, lon;
     FloatingActionButton addMap;
     private Location currentLocation;
     FusedLocationProviderClient client;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -47,9 +52,11 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mMap = googleMap;
+
+            //LatLng umd = new LatLng(lat, lon);
+            //googleMap.addMarker(new MarkerOptions().position(umd).title("University of Maryland"));
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(umd));
         }
     };
 
@@ -60,6 +67,9 @@ public class MapsFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_maps, container, false);
         addMap = view.findViewById(R.id.addMap);
         client = LocationServices.getFusedLocationProviderClient(getActivity());
+        //Bundle bundle = this.getArguments();
+        //lat = bundle.getDouble("lat");
+        //lon = bundle.getDouble("lon");
 
         // Initialize map fragment
         SupportMapFragment supportMapFragment=(SupportMapFragment)
@@ -86,6 +96,7 @@ public class MapsFragment extends Fragment {
                         // Animating to zoom the marker
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                         // Add marker on map
+                        markerOptions.snippet("Test snippet");
                         googleMap.addMarker(markerOptions);
                     }
                 });

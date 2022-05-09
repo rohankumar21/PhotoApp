@@ -11,11 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_margin="10dp"
-        android:backgroundTint="#91ABC9"
+        android:backgroundTint="@color/lightPurple"
         android:src="@drawable/ic_edit_white" />
 
     <fragment
