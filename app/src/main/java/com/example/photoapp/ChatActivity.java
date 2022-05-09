@@ -1,3 +1,4 @@
+
 package com.example.photoapp;
 
 import android.Manifest;
@@ -56,8 +57,8 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerView;
-    ImageView profile, block;
-    TextView name, userstatus;
+    ImageView profile;
+    TextView userstatus;
     EditText msg;
     ImageButton send, attach;
     FirebaseAuth firebaseAuth;
@@ -86,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // initialise the text views and layouts
         profile = findViewById(R.id.profiletv);
-        name = findViewById(R.id.nameptv);
+
         userstatus = findViewById(R.id.onlinetv);
         msg = findViewById(R.id.messaget);
         send = findViewById(R.id.sendmsg);
@@ -149,7 +150,6 @@ public class ChatActivity extends AppCompatActivity {
                             userstatus.setText("Last Seen:" + timedate);
                         }
                     }
-                    name.setText(nameh);
 
                 }
             }

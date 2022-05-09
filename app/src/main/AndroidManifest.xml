@@ -13,7 +13,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/prototype_image_one"
         android:label="Maperture"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

@@ -1,4 +1,7 @@
+
+
 package com.example.photoapp;
+
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -75,22 +78,25 @@ public class ProfileFragment extends Fragment {
         pd = new ProgressDialog(getActivity());
         loadMyPosts();
         pd.setCanceledOnTouchOutside(false);
-        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+        String uid = firebaseUser.getUid();
 
-        query.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     // Retrieving Data from firebase
-                    String name = "" + dataSnapshot1.child("name").getValue();
-                    String emaill = "" + dataSnapshot1.child("email").getValue();
-                    String image = "" + dataSnapshot1.child("image").getValue();
-                    // setting data to our text view
-                    nam.setText(name);
-                    email.setText(emaill);
-                    try {
-                        Glide.with(getActivity()).load(image).into(avatartv);
-                    } catch (Exception e) {
+                    if (dataSnapshot1.child("uid").getValue().equals(uid)){
+                        String name = "" + dataSnapshot1.child("name").getValue().toString();
+                        String em = "" + dataSnapshot1.child("email").getValue().toString();
+                        String image = "" + dataSnapshot1.child("image").getValue().toString();
+
+                        nam.setText(name);
+                        email.setText(em);
+                        try {
+                            Glide.with(getActivity()).load(image).into(avatartv);
+                        } catch (Exception e) {
+
+                        }
 
                     }
                 }
