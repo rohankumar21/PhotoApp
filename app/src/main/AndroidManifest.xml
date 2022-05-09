@@ -15,7 +15,7 @@
         android:allowBackup="true"
         android:icon="@drawable/prototype_image_one"
         android:label="Maperture"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/prototype_image_one"
         android:supportsRtl="true"
         android:theme="@style/Theme.PhotoApp">
         <activity
