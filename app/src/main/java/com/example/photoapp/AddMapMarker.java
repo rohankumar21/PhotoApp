@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,17 +60,7 @@ import java.util.HashMap;
 
 public class AddMapMarker extends AppCompatActivity {
 
-    private FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    StorageReference storageReference;
     String storagepath = "";
-    String uid;
-    ImageView set, pic;
-    TextView location, title, description;
-    ProgressDialog pd;
-    Button mapUpload;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
@@ -85,85 +76,12 @@ public class AddMapMarker extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_map_marker);
+        setContentView(R.layout.fragment_maps);
 
-        pic = findViewById(R.id.map_pic);
-        location = findViewById(R.id.location);
-        title = findViewById(R.id.title);
-        description = findViewById(R.id.description);
-        set = findViewById(R.id.setting_profile_image);
-        pd = new ProgressDialog(this);
-        pd.setCanceledOnTouchOutside(false);
-        mapUpload = findViewById(R.id.mapUpload);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        databaseReference = firebaseDatabase.getReference("Users");
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-
-                    String image = "" + dataSnapshot1.child("image").getValue();
-
-                    try {
-                        Glide.with(AddMapMarker.this).load(image).into(set);
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pd.setMessage("Setting location");
-                showNamephoneupdate(" location");
-            }
-        });
-
-
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pd.setMessage("Setting title");
-                showNamephoneupdate(" title");
-            }
-        });
-
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pd.setMessage("Updating Picture");
-                profileOrCoverPhoto = "image";
-                showImagePicDialog();
-            }
-        });
-
-        description.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pd.setMessage("Updating Description");
-                showNamephoneupdate(" description");
-            }
-        });
-
-        mapUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fetchLocation();
-            }
-        });
+        fetchLocation();
     }
 
     private void fetchLocation() {
@@ -171,7 +89,6 @@ public class AddMapMarker extends AppCompatActivity {
                 this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
         }
         @SuppressLint("MissingPermission") Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -190,74 +107,9 @@ public class AddMapMarker extends AppCompatActivity {
                 }
             }
         });
+        finish();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-
-                    String image = "" + dataSnapshot1.child("image").getValue();
-
-                    try {
-                        Glide.with(AddMapMarker.this).load(image).into(set);
-                    } catch (Exception e) {
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        description.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pd.setMessage("Changing Password");
-                showNamephoneupdate(" description");
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-
-                    String image = "" + dataSnapshot1.child("image").getValue();
-
-                    try {
-                        Glide.with(AddMapMarker.this).load(image).into(set);
-                    } catch (Exception e) {
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        description.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pd.setMessage("Changing Password");
-                showNamephoneupdate(" description");
-            }
-        });
-    }
 
     // checking storage permission ,if given then we can add something in our storage
     private Boolean checkStoragePermission() {
@@ -282,182 +134,6 @@ public class AddMapMarker extends AppCompatActivity {
         requestPermissions(cameraPermission, CAMERA_REQUEST);
     }
 
-    // We will show an alert box where we will write our old and new password
-    private void showPasswordChangeDailog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_update_password, null);
-        final EditText oldpass = view.findViewById(R.id.oldpasslog);
-        final EditText newpass = view.findViewById(R.id.newpasslog);
-        Button editpass = view.findViewById(R.id.updatepass);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        editpass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String oldp = oldpass.getText().toString().trim();
-                String newp = newpass.getText().toString().trim();
-                if (TextUtils.isEmpty(oldp)) {
-                    Toast.makeText(AddMapMarker.this, "Current Password cant be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(newp)) {
-                    Toast.makeText(AddMapMarker.this, "New Password cant be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                dialog.dismiss();
-                updatePassword(oldp, newp);
-            }
-        });
-    }
-
-    // Now we will check that if old password was authenticated
-    // correctly then we will update the new password
-    private void updatePassword(String oldp, final String newp) {
-        pd.show();
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
-        AuthCredential authCredential = EmailAuthProvider.getCredential(user.getEmail(), oldp);
-        user.reauthenticate(authCredential)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        user.updatePassword(newp)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        pd.dismiss();
-                                        Toast.makeText(AddMapMarker.this, "Changed Password", Toast.LENGTH_LONG).show();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                pd.dismiss();
-                                Toast.makeText(AddMapMarker.this, "Failed", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                pd.dismiss();
-                Toast.makeText(AddMapMarker.this, "Failed", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    // Updating name
-    private void showNamephoneupdate(final String key) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Update" + key);
-
-        // creating a layout to write the new name
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(10, 10, 10, 10);
-        final EditText editText = new EditText(this);
-        editText.setHint("Enter" + key);
-        layout.addView(editText);
-        builder.setView(layout);
-
-        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String value = editText.getText().toString().trim();
-                if (!TextUtils.isEmpty(value)) {
-                    pd.show();
-
-                    // Here we are updating the new name
-                    HashMap<String, Object> result = new HashMap<>();
-                    result.put(key, value);
-                    databaseReference.child(firebaseUser.getUid()).updateChildren(result).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            pd.dismiss();
-
-                            // after updated we will show updated
-                            Toast.makeText(AddMapMarker.this, " updated ", Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
-                            Toast.makeText(AddMapMarker.this, "Unable to update", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    if (key.equals("name")) {
-                        final DatabaseReference databaser = FirebaseDatabase.getInstance().getReference("Posts");
-                        Query query = databaser.orderByChild("uid").equalTo(uid);
-                        query.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                    String child = databaser.getKey();
-                                    dataSnapshot1.getRef().child("uname").setValue(value);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                } else {
-                    Toast.makeText(AddMapMarker.this, "Unable to update", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                pd.dismiss();
-            }
-        });
-        builder.create().show();
-    }
-
-    // Here we are showing image pic dialog where we will select
-    // and image either from camera or gallery
-    private void showImagePicDialog() {
-        String options[] = {"Camera", "Gallery"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick Image From");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // if access is not given then we will request for permission
-                if (which == 0) {
-                    if (!checkCameraPermission()) {
-                        requestCameraPermission();
-                    } else {
-                        pickFromCamera();
-                    }
-                } else if (which == 1) {
-                    if (!checkStoragePermission()) {
-                        requestStoragePermission();
-                    } else {
-                        pickFromGallery();
-                    }
-                }
-            }
-        });
-        builder.create().show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
-                imageuri = data.getData();
-                uploadProfileCoverPhoto(imageuri);
-            }
-            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
-                uploadProfileCoverPhoto(imageuri);
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -469,70 +145,5 @@ public class AddMapMarker extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    // Here we will click a photo and then go to startactivityforresult for updating data
-    private void pickFromCamera() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.TITLE, "Temp_pic");
-        contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Temp Description");
-        imageuri = this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-        Intent camerIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        camerIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri);
-        startActivityForResult(camerIntent, IMAGE_PICKCAMERA_REQUEST);
-    }
-
-    // We will select an image from gallery
-    private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, IMAGEPICK_GALLERY_REQUEST);
-    }
-
-    // We will upload the image from here.
-    private void uploadProfileCoverPhoto(final Uri uri) {
-        pd.show();
-
-        // We are taking the filepath as storagepath + firebaseauth.getUid()+".png"
-        String filepathname = storagepath + "" + profileOrCoverPhoto + "_" + firebaseUser.getUid();
-        StorageReference storageReference1 = storageReference.child(filepathname);
-        storageReference1.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isSuccessful()) ;
-
-                // We will get the url of our image using uritask
-                final Uri downloadUri = uriTask.getResult();
-                if (uriTask.isSuccessful()) {
-
-                    // updating our image url into the realtime database
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put(profileOrCoverPhoto, downloadUri.toString());
-                    databaseReference.child(firebaseUser.getUid()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            pd.dismiss();
-                            Toast.makeText(AddMapMarker.this, "Updated", Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
-                            Toast.makeText(AddMapMarker.this, "Error Updating ", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    pd.dismiss();
-                    Toast.makeText(AddMapMarker.this, "Error", Toast.LENGTH_LONG).show();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                pd.dismiss();
-                Toast.makeText(AddMapMarker.this, "Error", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

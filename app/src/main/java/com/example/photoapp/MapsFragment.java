@@ -34,6 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MapsFragment extends Fragment {
     private static final int LOCATION_REQUEST_CODE = 101;
     private GoogleMap mMap;
+    private double[] coords;
     private double lat, lon;
     FloatingActionButton addMap;
     private Location currentLocation;
@@ -53,10 +54,11 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
+            //startActivity(new Intent(getActivity(), AddMapMarker.class));
 
-            //LatLng umd = new LatLng(lat, lon);
-            //googleMap.addMarker(new MarkerOptions().position(umd).title("University of Maryland"));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(umd));
+            LatLng curr = new LatLng(38.987076728223116,  -76.94253284446388);
+            googleMap.addMarker(new MarkerOptions().position(curr).title("University of Maryland"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(curr));
         }
     };
 
@@ -67,9 +69,6 @@ public class MapsFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_maps, container, false);
         addMap = view.findViewById(R.id.addMap);
         client = LocationServices.getFusedLocationProviderClient(getActivity());
-        //Bundle bundle = this.getArguments();
-        //lat = bundle.getDouble("lat");
-        //lon = bundle.getDouble("lon");
 
         // Initialize map fragment
         SupportMapFragment supportMapFragment=(SupportMapFragment)
